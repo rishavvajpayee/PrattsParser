@@ -5,15 +5,12 @@ def calculate(operator_value, left, right):
     """
     Rather than building the AST we directly calculate
     """
-    if operator_value == '+':
-            left = left + right
-    elif operator_value == '-':
-        left = left - right
-    elif operator_value == '*':
-        left = left * right
-    elif operator_value == '/':
-        left = left / right
-    return left
+    match (operator_value):
+        case '+': return left + right
+        case '-': return left - right
+        case '*': return left * right
+        case '/': return left / right
+        case _  : return SyntaxError("Invalid operator")
 
 
 def parse(tokens: Iterator, precedence: int):
@@ -41,5 +38,7 @@ def parse(tokens: Iterator, precedence: int):
             break
         tokens.next()
         right = parse(tokens, r)
-        left =calculate(operator_value, left, right)
+        left = calculate(operator_value, left, right)
+        if type(left) == SyntaxError:
+            raise left
     return left
